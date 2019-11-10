@@ -3,7 +3,9 @@
 function h = quadsurf(X,Y,val,varargin)
 	n = size(X);
 if (1)
-	tri = grid2tri(n);
+	mesh = UnstructuredMesh();
+	tri  = mesh.grid2tri(n);
+%	tri = grid2tri(n);
 	val = [val(:),val(:)];
 	h = trisurf(tri,flat(X),flat(Y),[],val,varargin{:});
 else

@@ -1,10 +1,13 @@
-% 2015-03-01 13:00:25.762875871 +0100
-function s = tail(n,s)
-	C = strsplit(s,'\n');
-	if (n < 0)
-		s = sprintf('%s\n',C{-n:end});
+% 2017-05-18 17:39:24.123138644 +0200
+function h = tail(x,n)
+	if (nargin()<2)
+		n = 5;
+	end
+	if (isvector(x))
+		n = min(n,length(x));
+		h = x(end-n+1:end);
 	else
-		s = sprintf('%s\n',C{end-n+1:end});
+		n = min(n,size(x,1));
+		h = x(end-n+1:end,:);
 	end
 end
-

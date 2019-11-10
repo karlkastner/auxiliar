@@ -4,8 +4,10 @@ function h = head(x,n)
 		n = 5;
 	end
 	if (isvector(x))
-		h = x(1);
+		n = min(n,length(x));
+		h = x(1:n);
 	else
+		n = min(n,size(x,1));
 		h = x(1:n,:);
 	end
 end
