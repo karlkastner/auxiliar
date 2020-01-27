@@ -28,7 +28,7 @@ function varargout = vline(varargin)
 	%	set(ax,'hold','off');
 		hold(ax,'off');
 	end
-	if (nargout() > 1)
+	if (nargout() > 0)
 		varargout{1} = h;
 	else
 		varargout = {};

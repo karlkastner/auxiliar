@@ -96,10 +96,16 @@ function pdfprint(varargin)
 		pdfname = [base,'.pdf'];
 		svgname = [base,'.svg'];
 		print(fh,svgname,'-dsvg');
+
+		% TODO, this fails, if no dir is given
+		dir   = dirname(pdfname);
+		file  = basename(pdfname);
+
 		% fix faulty bounding box
 		system(['LD_LIBRARY_PATH= inkscape --verb=FitCanvasToDrawing --verb=FileSave --verb=FileClose --verb=FileQuit ', svgname,' 2>/dev/null']);
 		system(['LD_LIBRARY_PATH= inkscape --export-pdf=',pdfname,' ',svgname,' 2>/dev/null']);
-        	system(['LD_LIBRARY_PATH= pdfcrop ', pdfname ' 2>/dev/null']);
+		system(['LD_LIBRARY_PATH= mkdir -p ',dir,'/crop']);
+        	system(['LD_LIBRARY_PATH= pdfcrop ', pdfname ,' ', dir, '/crop/', file(1:end-4), '-crop.pdf 2>/dev/null']);
 	case {'png'}
 		pngname = [base,'.png'];
 		print(fh,pngname,'-dpng','-r600');
