@@ -6,6 +6,9 @@ function s = setfield_deep(s,fieldname,value)
 	% set recursively
 	if (length(field_A) > 1)
 		fieldname = strjoin(field_A(2:end),'.');
+		if (~isfield(s,field_A{1}) && ~isprop(s,field_A{1}))
+			s.(field_A{1}) = struct();
+		end
 		s.(field_A{1}) = setfield_deep(s.(field_A{1}),fieldname,value);
 	else
 		s.(field_A{1}) = value;
