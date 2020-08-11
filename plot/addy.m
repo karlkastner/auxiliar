@@ -3,10 +3,12 @@
 %
 %function [ax1 ax2] = plotxx(x1,y1,varargin)
 % function ax2 = addy(ax1,varargin);
-function ax2 = addy(ax,varargin);
-	p = 0.8;
+function ax2 = addy(ax,p,varargin);
 	if (nargin()<1 || isempty(ax))
 		ax = gca;
+	end
+	if (nargin()<2)
+		p = 0.8;
 	end
 	ax1 = ax(end);
 	ax1_pos = ax1.Position; % position of first axes
@@ -28,13 +30,15 @@ function ax2 = addy(ax,varargin);
 	end
 	ax(end+1) = ax2;
 	if (length(ax)>2)
-	% correct positions
-	for idx=1:length(ax)-1
-		set(ax(idx),'pos',[ax1_pos(1:2),p*ax1_pos(3),ax1_pos(4)])
-	end
-	xlim_ = xlim(ax(1));
-	xlim(ax(end),[xlim_(1),xlim_(1) + (xlim_(2)-xlim_(1))/p]);
-	%linkaxes(ax,'x')
+		% correct positions
+		n = length(ax);
+		for idx=1:length(ax)-1
+			%ax_pos = get(ax(idx),'pos');
+			set(ax(idx),'pos',[ax1_pos(1:2),(1-2*(1-p)*(n-idx)/n)*ax1_pos(3),ax1_pos(4)])
+		end
+		xlim_ = xlim(ax(1));
+		xlim(ax(end),[xlim_(1),xlim_(1) + (xlim_(2)-xlim_(1))/p]);
+		%linkaxes(ax,'x')
 	end
 end
 

@@ -1,0 +1,3 @@
+classdef Constant < Physics
+end
+

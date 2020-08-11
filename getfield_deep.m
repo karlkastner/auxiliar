@@ -2,7 +2,8 @@
 % Karl Kastner, Berlin
 
 function value = getfield_deep(s,fieldname)
-	field_A = strsplit(fieldname,'\.');
+	% note "nomagic" match, '.' has not to be scaped with \
+	field_A = strsplit(fieldname,'.');
 	% get recursively
 	if (length(field_A) > 1)
 		fieldname = strjoin(field_A(2:end),'.');

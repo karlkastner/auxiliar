@@ -1,0 +1,3 @@
+classdef GSD < GrainSizeDistribution
+end
+
