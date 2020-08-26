@@ -89,7 +89,7 @@ function pdfprint(varargin)
 		print(fh,epsname,'-depsc');
 		system(['LD_LIBRARY_PATH= epstopdf ', epsname]);
         	system(['LD_LIBRARY_PATH= pdfcrop ', pdfname ,' ', dir, '/crop/', file(1:end-4), '-crop.pdf 2>/dev/null']);
-	case {'svg'}
+	case {'svg','pdf'}
 		svgname = [base,'.svg'];
 		pdfname = [base,'.pdf'];
 		print(fh,svgname,'-dsvg');
