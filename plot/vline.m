@@ -11,6 +11,11 @@ function varargout = vline(varargin)
 		id = 1;
 	end
 	x0 = varargin{id};
+%	if (length(varargin)>id)
+%		hv = varargin{id+1};
+%	else
+%		hf = 'off';
+%	end
 %	hx=graph2d.constantline(x0,varargin{:});
 %	changedependvar(hx,'x');
 %	plot([x0 x0],[realmin realmax],varargin{:});	
@@ -19,10 +24,10 @@ function varargout = vline(varargin)
 	hold(ax,'on');
 	if (nargin() < 2)
 		% 
-		h = plot(ax,[x0(:) x0(:)]',ylim','color',[0 0 0],varargin{id+1:end},'HandleVisibility','off');	
+		h = plot(ax,[x0(:) x0(:)]',ylim','color',[0 0 0],'HandleVisibility','off',varargin{id+1:end});	
 	else
 		%h = plot(ax,[x0(:) x0(:)]',ylim','HandleVisibility','off',varargin{id+1:end});	
-		h = plot(ax,[x0(:) x0(:)]',ylim',varargin{id+1:end},'HandleVisibility','off');	
+		h = plot(ax,[x0(:) x0(:)]',ylim','HandleVisibility','off',varargin{id+1:end});	
 	end
 	if (~ih)
 	%	set(ax,'hold','off');

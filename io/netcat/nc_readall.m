@@ -10,7 +10,8 @@ function [nc, info] = nc_readall(filename)
 			if (f(1) >= '0' && f(1) <= '9')
 				f = ['n',f];
 			end
-			nc.(f) = ncread(filename,fieldname_C{idx});
+			fn = genvarname(f);
+			nc.(fn) = ncread(filename,fieldname_C{idx});
 		end
 	end
 	if (~isempty(info.Attributes))
@@ -21,7 +22,8 @@ function [nc, info] = nc_readall(filename)
 			while (isfield(nc,field))
 				field(end+1) = '_';
 			end
-			nc.(fieldname_C{idx}) = info.Attributes(idx).Value;
+			fn = genvarname(fieldname_C{idx});
+			nc.(fn) = info.Attributes(idx).Value;
 		end
 	end
 end

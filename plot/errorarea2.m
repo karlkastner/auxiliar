@@ -1,3 +1,4 @@
+% 2020-01-05 11:34:46.930214876 +0100
 function errorarea(x,y,color)
 	a = area(x,[y(:,1),y(:,3)-y(:,1)]);
 	a(1).FaceColor='none';

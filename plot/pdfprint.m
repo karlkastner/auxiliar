@@ -1,7 +1,7 @@
 % 2013-09-20 18:37:30 +0700
 % Karl Kastner, Berlin
 % scale is desired scale of testwidth in publication
-
+% function pdfprint(varargin)
 function pdfprint(varargin)
 	% this is pre-scaled for A5
 	width  = 2*14.8; % cm
@@ -12,7 +12,7 @@ function pdfprint(varargin)
 	scale   = 1;
 	aspect  = 1;
 	svgflag = false;
-	type    = 'svg'; % default is svg converted to ped
+	type    = 'svg'; % default is svg converted to pdf
 	dpos  = [0,0,0,0];
 	fh    = varargin{1};
 	name  = varargin{2};
@@ -97,12 +97,13 @@ function pdfprint(varargin)
 		% fix faulty bounding box
 		system(['LD_LIBRARY_PATH= inkscape --verb=FitCanvasToDrawing --verb=FileSave --verb=FileClose --verb=FileQuit ', svgname,' 2>/dev/null']);
 		system(['LD_LIBRARY_PATH= inkscape --export-pdf=',pdfname,' ',svgname,' 2>/dev/null']);
-        	system(['LD_LIBRARY_PATH= pdfcrop ', pdfname ,' ', dir, '/crop/', file(1:end-4), '-crop.pdf 2>/dev/null']);
+        	system(['LD_LIBRARY_PATH= pdfcrop ', pdfname ,' ', dir, '/crop/', file, '-crop.pdf 2>/dev/null']);
+        	%system(['LD_LIBRARY_PATH= pdfcrop ', pdfname ,' ', dir, '/crop/', file(1:end-4), '-crop.pdf 2>/dev/null']);
 	case {'png'}
 		pngname = [base,'.png'];
 		print(fh,pngname,'-dpng','-r600');
 		% trim the image
-		command = ['LD_LIBRARY_PATH= convert ', pngname, ' -trim +repage ', dir, '/crop/', file(1:end-4),'-crop.png'];
+		command = ['LD_LIBRARY_PATH= convert ', pngname, ' -trim +repage ', dir, '/crop/', file, '-crop.png'];
 		system(command);
 	otherwise
 		error('unknown type')
