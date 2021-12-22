@@ -3,20 +3,24 @@
 
 function h = plot_ellipse(varargin)
 	idx = 1;
+	% graphics handle
 	if (strcmp(class(varargin{idx}),'matlab.graphics.axis.Axes'))
 		ax = varargin{idx};
 		idx = idx+1;
 	else
 		ax = gca;
 	end
+	% coordinates of the ellipse
 	c   = varargin{idx};
 	idx = idx+1;
+	% ?
 	if (length(varargin) >= idx && ~isempty(varargin{idx}))
 		p = varargin{idx};
 	else
 		p = [];
 	end
 	idx = idx+1
+	% number of points
 	if (length(varargin) >= idx && ~isempty(varargin{idx}))
 		n = varargin{idx};
 	else
@@ -27,7 +31,7 @@ function h = plot_ellipse(varargin)
 	end
 	parg  = varargin(idx:end);
 
-	[X Y] = ellipse(c,p,n);
+	[X, Y] = ellipse(c,p,n);
 
 	h = plot(ax,X,Y,parg{:});
 end % plot_ellipse

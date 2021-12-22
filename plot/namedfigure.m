@@ -1,4 +1,5 @@
 % 2014-11-26 18:01:51.969138940 +0100
+% function varargout = namedfigure(n,name_str)
 function varargout = namedfigure(n,name_str)
 	fh = figure(n);
 	if (~isempty(name_str))
