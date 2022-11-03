@@ -1,5 +1,8 @@
 % 2013-09-20 18:37:30 +0700
 % Karl Kastner, Berlin
+%
+%% print a pdf-file for a figure
+%
 % scale is desired scale of testwidth in publication
 % function pdfprint(varargin)
 function pdfprint(varargin)

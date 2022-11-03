@@ -16,7 +16,7 @@ breaklines=true
 \setlength{\cftsubsecnumwidth}{3.5em}
 
 \title{Manual for Package:
-auxiliar\protect\\Revision 14M
+auxiliar\protect\\Revision 15M
 }
 \author{Karl K\"astner}
 %\date{}
@@ -177,6 +177,7 @@ ${}$
 \subsection{cvec}
 ${}$
 \begin{lstlisting}
+ make vector a column vector
 
 \end{lstlisting}
 \subsection{diag3}
@@ -217,6 +218,7 @@ ${}$
 \subsection{flat}
 ${}$
 \begin{lstlisting}
+ reshape a (hyper)-matrix into a column vector
 
 \end{lstlisting}
 \subsection{folder\_name\_from\_parameters}
@@ -247,6 +249,7 @@ ${}$
 \subsection{hash\_str}
 ${}$
 \begin{lstlisting}
+ hash a string into a single number
 
 \end{lstlisting}
 \subsection{hashcode}
@@ -262,6 +265,7 @@ ${}$
 \subsection{innerspace}
 ${}$
 \begin{lstlisting}
+ linearly increasing vector sampled at mid-intervals
 
 \end{lstlisting}
 \subsection{int2byte}
@@ -341,6 +345,7 @@ ${}$
 \subsection{printf}
 ${}$
 \begin{lstlisting}
+ print values to standard output
 
 \end{lstlisting}
 \subsection{save\_}
@@ -372,6 +377,7 @@ ${}$
 \subsection{issym}
 ${}$
 \begin{lstlisting}
+ return true of variable is symbolic
 
 \end{lstlisting}
 \subsection{iterate\_cell}
@@ -380,6 +386,11 @@ ${}$
 
 \end{lstlisting}
 \subsection{jmemory}
+${}$
+\begin{lstlisting}
+
+\end{lstlisting}
+\subsection{labelline}
 ${}$
 \begin{lstlisting}
 
@@ -441,12 +452,22 @@ ${}$
 \begin{lstlisting}
 
 \end{lstlisting}
+\subsection{nearest\_fractional\_timestep}
+${}$
+\begin{lstlisting}
+
+\end{lstlisting}
 \subsection{none}
 ${}$
 \begin{lstlisting}
 
 \end{lstlisting}
 \subsection{objcopy}
+${}$
+\begin{lstlisting}
+
+\end{lstlisting}
+\subsection{oversampleNZ}
 ${}$
 \begin{lstlisting}
 
@@ -550,6 +571,7 @@ ${}$
 \subsection{errorarea2}
 ${}$
 \begin{lstlisting}
+ plot area around a curve
 
 \end{lstlisting}
 \subsection{errorbar\_man}
@@ -585,6 +607,7 @@ ${}$
 \subsection{hline}
 ${}$
 \begin{lstlisting}
+ plot a horizontal line
 
 \end{lstlisting}
 \subsection{hold\_color}
@@ -641,6 +664,7 @@ ${}$
 \subsection{namedfigure}
 ${}$
 \begin{lstlisting}
+ create a figure and set its window title
 
 \end{lstlisting}
 \subsection{nansurf}
@@ -661,6 +685,7 @@ ${}$
 \subsection{pdfprint}
 ${}$
 \begin{lstlisting}
+ print a pdf-file for a figure
 
 \end{lstlisting}
 \subsection{percenttick}
@@ -780,6 +805,7 @@ ${}$
 \subsection{splitfigure}
 ${}$
 \begin{lstlisting}
+ combined figure and subplot
 
 \end{lstlisting}
 \subsection{turtle}
@@ -795,6 +821,7 @@ ${}$
 \subsection{vline}
 ${}$
 \begin{lstlisting}
+ plot a vertical line
 
 \end{lstlisting}
 \subsection{vline\_man}
@@ -825,6 +852,7 @@ ${}$
 \subsection{ytick}
 ${}$
 \begin{lstlisting}
+ wrapper for setting yticks
 
 \end{lstlisting}
 \subsection{yticklabel}
@@ -861,11 +889,13 @@ ${}$
 \subsection{rvec}
 ${}$
 \begin{lstlisting}
+ reshape input vector to a column vector
 
 \end{lstlisting}
 \subsection{select}
 ${}$
 \begin{lstlisting}
+ select columns of a vector along dimension dim
 
 \end{lstlisting}
 \subsection{setfield\_behind}
@@ -876,6 +906,7 @@ ${}$
 \subsection{setfield\_deep}
 ${}$
 \begin{lstlisting}
+ set values of a struct or object, fieldnames can have sub-fields indicated by dots
 
 \end{lstlisting}
 \subsection{setfields}
@@ -927,6 +958,7 @@ ${}$
 \subsection{strjoin}
 ${}$
 \begin{lstlisting}
+ join a cell array of strings
 
 \end{lstlisting}
 \subsection{strsplit\_man}
@@ -994,6 +1026,7 @@ ${}$
 \subsection{basename}
 ${}$
 \begin{lstlisting}
+ strip the directory from a filename
 
 \end{lstlisting}
 \subsection{cbrt}
@@ -1004,6 +1037,7 @@ ${}$
 \subsection{dirname}
 ${}$
 \begin{lstlisting}
+ strip file-name from path
 
 \end{lstlisting}
 \subsection{head}
@@ -1027,6 +1061,11 @@ ${}$
 
 \end{lstlisting}
 \section{auxiliar}
+\subsection{table2struc\_man}
+${}$
+\begin{lstlisting}
+
+\end{lstlisting}
 \subsection{toInt32}
 ${}$
 \begin{lstlisting}

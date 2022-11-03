@@ -1,5 +1,7 @@
 % 2014-12-16 11:59:33.782143893 +0100
-
+% Karl Kästner, Berlin
+%
+%% reshape input vector to a column vector
 function X = rvec(X)
 	s = size(X);
 	if (s(1)<=1 && s(2)<=1)

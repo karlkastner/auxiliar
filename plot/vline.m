@@ -1,6 +1,8 @@
 % 2014-11-03 18:54:53.806010046 +0100
 % Karl Kastner, Berlin
-
+%
+%% plot a vertical line
+%
 function varargout = vline(varargin)
 	switch (class(varargin{1}))
 	case {'matlab.graphics.axis.Axes'}

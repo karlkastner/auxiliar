@@ -1,4 +1,8 @@
 % Tue  9 Feb 12:36:14 CET 2021
+% Karl Kästner, Berlin
+%
+%% hash a string into a single number
+%
 function [h,a] = hash_str(s,h,a)
 	if (nargin()<2)
 		h = 0;

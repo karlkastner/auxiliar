@@ -1,6 +1,8 @@
 % Thu Feb 19 18:18:33 CET 2015
 % Karl Kastner, Berlin
-
+%
+%% plot a horizontal line
+%
 function varargout = hline(varargin)
 	switch (class(varargin{1}))
 	case {'matlab.graphics.axis.Axes'}

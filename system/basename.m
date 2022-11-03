@@ -1,5 +1,7 @@
 % 2015-03-05 15:01:33.349275215 +0100
 % Karl Kastner, Berlin
+%
+%% strip the directory from a filename
 % 
 % strip directory and suffix from file name
 function str = basename(str,varargin)

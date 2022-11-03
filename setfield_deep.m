@@ -1,6 +1,8 @@
 % Sat Jan 10 15:59:22 CET 2015
 % Karl Kastner, Berlin
-
+%
+%% set values of a struct or object, fieldnames can have sub-fields indicated by dots
+%
 function s = setfield_deep(s,fieldname,value)
 	field_A = strsplit(fieldname,'.');
 	% set recursively

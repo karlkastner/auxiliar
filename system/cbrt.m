@@ -2,6 +2,14 @@
 % Karl Kastner, Berlin
 
 function X = cbrt(X)
-	X = X.^(1/3);
+	if (issym(X))
+		X = X.^(1/3);
+	else
+	fdx = X>0;
+	X(fdx) = X(fdx).^(1/3);
+	% principal, i.e. non complex root
+	fdx = ~fdx;
+	X(fdx) = -((-X(fdx)).^(1/3));
+	end
 end
 

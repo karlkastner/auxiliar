@@ -1,5 +1,10 @@
 % 2020-01-05 11:34:46.930214876 +0100
-function errorarea(x,y,color,varargin)
+% Karl Kästner, Berlin
+%
+%% plot area around a curve
+%
+% function errorarea(x,y,color,varargin)
+function errorarea2(x,y,color,varargin)
 	a = area(x,[y(:,1),y(:,3)-y(:,1)]);
 	a(1).FaceColor='none';
 	a(2).FaceColor  = color; %[1,1,1]l

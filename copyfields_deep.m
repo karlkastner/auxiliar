@@ -3,7 +3,7 @@ function p2 = copyfields_deep(p1,p2)
 	f = fieldnames(p1);
 	for fi = rvec(f)
 		if (isstruct(p1.(fi{1})))
-			if (~isfield(p2,fi{1}))
+			if (~isfieldorprop(p2,fi{1}))
 				p2.(fi{1}) = p1.(fi{1});
 			else
 				p2.(fi{1}) = copyfields_deep(p1.(fi{1}),p2.(fi{1}));
