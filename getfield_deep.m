@@ -1,6 +1,8 @@
 %Fr 10. Apr 14:25:26 CEST 2015
 % Karl Kastner, Berlin
-
+%
+%% function value = getfield_deep(s,fieldname)
+%
 function value = getfield_deep(s,fieldname)
 	% note "nomagic" match, '.' has not to be scaped with \
 	field_A = strsplit(fieldname,'.');
