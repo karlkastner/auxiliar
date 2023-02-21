@@ -31,6 +31,9 @@ function pdfprint(varargin)
 	svgflag = false;
 	type    = 'svg'; % default is svg converted to pdf
 	dpos  = [0,0,0,0];
+	if (nargin<1)
+		return;
+	end
 	fh    = varargin{1};
 	name  = varargin{2};
 	if (length(varargin)>2 && ~isempty(varargin{3}))

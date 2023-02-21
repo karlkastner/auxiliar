@@ -21,47 +21,49 @@
 %% fetch the dependencies stored in other repositories
 %
 
-function fetch_dependencies(url,filename_str,dryrun)
-
-if (nargin()<3)
-	dryrun = false;
-end
-
-% check for svn
-ret = system('svn --version');
-if (ret)
-	error('svn has to be installed and acessible via the library path')
-end
-
-% read dependencies from file
-file_str = fileread(filename_str);
-
-% split into lines
-file_C = cvec(strsplit(file_str, '\n'));
-
-% check out all dependencies, this may take a while
-for idx=1:length(file_C)
-	line  = file_C{idx};
-	if (~isempty(line))
-		line_C     = strsplit(line,' ');
-		dep        = line_C{1};
-		revision   = line_C{2};
-		dep_C      = strsplit(dep,'/');
-		repository = dep_C{1};
-		path       = join(dep_C(2:end),filesep);
-		dirname_   = join(dep_C(1:end-1),filesep);
-		mkdir(['lib/',dirname_{1}]);
-		dest = sprintf('./lib/%s/%s',repository,path{1});
-		if (0 == exist(dest,'file'))
-			cmd  = sprintf('svn export %s/%s/trunk/%s %s',url,repository,path{1},dest);
-			if (dryrun)
-				disp(cmd);
-			else
-				system(cmd);
-			end
-		end
+function dependencies_fetch(url,filename_str,dryrun)
+	if (nargin()<1)
+		return;
 	end
-end % for idx
-
+	
+	if (nargin()<3)
+		dryrun = false;
+	end
+	
+	% check for svn
+	ret = system('svn --version');
+	if (ret)
+		error('svn has to be installed and acessible via the library path')
+	end
+	
+	% read dependencies from file
+	file_str = fileread(filename_str);
+	
+	% split into lines
+	file_C = strsplit(file_str, '\n');
+	
+	% export all dependencies, this may take a while
+	for idx=1:length(file_C)
+		line  = file_C{idx};
+		if (~isempty(line))
+			line_C     = strsplit(line,' ');
+			dep        = line_C{1};
+			revision   = line_C{2};
+			dep_C      = strsplit(dep,'/');
+			repository = dep_C{1};
+			path       = join(dep_C(2:end),filesep);
+			dirname_   = join(dep_C(1:end-1),filesep);
+			mkdir(['lib/',dirname_{1}]);
+			dest = sprintf('./lib/%s/%s',repository,path{1});
+			if (0 == exist(dest,'file'))
+				cmd  = sprintf('svn export -r %s %s/%s/trunk/%s %s',revision,url,repository,path{1},dest);
+				if (dryrun)
+					disp(cmd);
+				else
+					system(cmd);
+				end % else of is dryrun
+			end % if 0 == exist
+		end % if ~isempty line
+	end % for idx
 end % dependencies_fetch
 
