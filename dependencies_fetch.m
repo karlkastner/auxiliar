@@ -21,7 +21,7 @@
 %% fetch the dependencies stored in other repositories
 %
 
-function dependencies_fetch(url,filename_str,dryrun)
+function dependencies_fetch(url,filename_str,dryrun,svnflag)
 	if (nargin()<1)
 		return;
 	end
@@ -29,11 +29,15 @@ function dependencies_fetch(url,filename_str,dryrun)
 	if (nargin()<3)
 		dryrun = false;
 	end
+
+	if (nargin()<4)
+		svnflag = false;
+	end
 	
 	% check for svn
 	ret = system('svn --version');
 	if (ret)
-		error('svn has to be installed and acessible via the library path')
+		error('svn has to be installed and acessible via the library path');
 	end
 	
 	% read dependencies from file
@@ -41,6 +45,10 @@ function dependencies_fetch(url,filename_str,dryrun)
 	
 	% split into lines
 	file_C = strsplit(file_str, '\n');
+
+	url_  = regexprep(url,'/$','');
+	url_C = strsplit(url_,'/');
+	user = url_C{end};
 	
 	% export all dependencies, this may take a while
 	for idx=1:length(file_C)
@@ -49,6 +57,7 @@ function dependencies_fetch(url,filename_str,dryrun)
 			line_C     = strsplit(line,' ');
 			dep        = line_C{1};
 			revision   = line_C{2};
+			commithash = line_C{3};
 			dep_C      = strsplit(dep,'/');
 			repository = dep_C{1};
 			path       = join(dep_C(2:end),filesep);
@@ -56,12 +65,23 @@ function dependencies_fetch(url,filename_str,dryrun)
 			mkdir(['lib/',dirname_{1}]);
 			dest = sprintf('./lib/%s/%s',repository,path{1});
 			if (0 == exist(dest,'file'))
+				if (svnflag)
 				cmd  = sprintf('svn export -r %s %s/%s/trunk/%s %s',revision,url,repository,path{1},dest);
 				if (dryrun)
 					disp(cmd);
 				else
 					system(cmd);
 				end % else of is dryrun
+				else
+					baseurl = 'https://raw.githubusercontent.com';
+					fullurl = [baseurl,'/',user,'/',repository,'/',commithash,'/',path{1}];
+					disp(['saving ',fullurl,' to ',dest]);
+					if (~dryrun)
+						% there seems to be a bug in matlab websave
+						% websave(dest,cmd)
+						urlwrite(fullurl,dest);
+					end
+				end
 			end % if 0 == exist
 		end % if ~isempty line
 	end % for idx

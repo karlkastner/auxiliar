@@ -32,7 +32,7 @@ function dependencies_determine(dep_filename,profile_filename,func_C)
 		p = profile('info');
 		save(profile_filename,'p');
 	else
-		load(pfile);
+		load(profile_filename);
 	end % else of if ~exist
 	
 	name_C = {p.FunctionTable.CompleteName};
@@ -52,7 +52,7 @@ function dependencies_determine(dep_filename,profile_filename,func_C)
 	for idx=1:length(name_C)
 		fdx = strfind(name_C{idx},'@');
 		if (~isempty(fdx))
-			sdx = fdx+regexp(name_C{idx}(fdx+1:end),'/','once')
+			sdx = fdx+regexp(name_C{idx}(fdx+1:end),'/','once');
 			name_C{idx} = name_C{idx}(1:sdx-1);
 		end
 	end % for idx
@@ -66,13 +66,38 @@ function dependencies_determine(dep_filename,profile_filename,func_C)
 	% get revision number
 	for idx=1:length(name_C)		
 		cmd = sprintf('svn info --show-item revision %s\n',[ROOTFOLDER,'/src/',name_C{idx}]);
-		[retval,ret_str] = system(cmd)
+		[retval,ret_str] = system(cmd);
 		if (0 == retval)
 			rev_C{idx,1} = chomp(ret_str);
 		else
-			rev_C{idx} = 'NaN';
+			rev_C{idx} = '0';
 		end
 	end
+	
+	% get git commit hash
+	for idx=1:length(name_C)
+		cmd = sprintf('svn info --show-item repos-root-url %s',[ROOTFOLDER,'/src/',name_C{idx}]);
+		[retval,ret_str] = system(cmd);
+		if (0 == retval)
+		url = chomp(ret_str);
+		% remove the lib
+		name_C{idx}
+		c = strsplit(name_C{idx},filesep);
+		c = join(c(3:end),'/');
+c
+		cmd = sprintf('svn propget git-commit --revprop -r HEAD %s\n',[url,'/',c{1}]);
+		[retval,ret_str] = system(cmd);
+		if (0 == retval)
+			commit_C{idx,1} = chomp(ret_str);
+		else
+			commit_C{idx} = 0;
+		end
+		else
+			commit_C{idx} = 0;
+		end
+	end
+%https://github.com/karlkastner/auxiliar/addpath_recursive.m
+
 
 	% determine library files
 	fid = fopen(dep_filename,'w');
@@ -83,12 +108,12 @@ function dependencies_determine(dep_filename,profile_filename,func_C)
 		name = name_C{idx};
 		if (strcmp(name(1:4),'lib/'))
 			%name_ = strsplit(name,'/');
-			fprintf(fid,'%s %s\n',name(5:end),rev_C{idx});
+			fprintf(fid,'%s %s %s\n',name(5:end),rev_C{idx},commit_C{idx});
 		end
 	end % for idx
 
 	fclose(fid)
 	type(dep_filename);
 
-end % function
+end % function dependencies_determine
 
