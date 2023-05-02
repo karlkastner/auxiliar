@@ -35,9 +35,11 @@ function dependencies_fetch(url,filename_str,dryrun,svnflag)
 	end
 	
 	% check for svn
-	ret = system('svn --version');
-	if (ret)
-		error('svn has to be installed and acessible via the library path');
+	if (svnflag)
+		ret = system('svn --version');
+		if (ret)
+			error('svn has to be installed and acessible via the library path. You can set svnflag to false to fetch dependencies without svn.');
+		end
 	end
 	
 	% read dependencies from file
