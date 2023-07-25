@@ -19,6 +19,10 @@
 % 
 % strip directory and suffix from file name
 function str = basename(str,varargin)
+	% remove trailing white space
+	str=chomp(str);
+	% remove traling slashes
+	str = regexprep(str,'/*$','');
 	str = regexprep(str,'.*/','');
 	str = regexprep(str,'.*\','');
 	for idx=1:length(varargin)

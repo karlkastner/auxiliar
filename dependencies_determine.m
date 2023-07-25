@@ -21,6 +21,10 @@
 %% determine dependencies of a matlab function
 %
 %% function dependencies_determine(dep_filename,profile_filename,func_C)
+%
+% TODO class files are not properly fethced
+% [l,p]=matlab.codetools.requiredFilesAndProducts('pattern_periodicity_test_batch')
+% C = {}; for idx=1:length(p) if (p(idx).Certain) C{end+1,1}=p(idx).Name, end, end
 function dependencies_determine(dep_filename,profile_filename,func_C)
 	
 	if (~exist(profile_filename,'file'))
@@ -57,6 +61,16 @@ function dependencies_determine(dep_filename,profile_filename,func_C)
 		end
 	end % for idx
 	end % if 0
+
+	% add class files
+%	for idx=1:length(name_C)
+%		fdx = strfind(name_C{idx},'@');
+%		if (~isempty(fdx))
+%			sdx = fdx+regexp(name_C{idx}(fdx+1:end),'/','once');
+%			name_C{idx} = name_C{idx}(1:sdx-1);
+%		end
+%	end % for idx
+	
 
 	% strip rootfolder
 	name_C = cvec(cellfun(@(x) strrep(x,[ROOTFOLDER,'src/'],''),name_C,'Uniformoutput',false));

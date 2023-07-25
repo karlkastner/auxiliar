@@ -36,7 +36,7 @@ function [totSize processed] = memsize(this,processed,leadstr)
 %			[leadstr, props(ii)]
 			
 			% recursion
-			[siz processed] = memsize(currentProperty,processed,[leadstr, props(ii)]);
+			[siz, processed] = memsize(currentProperty,processed,[leadstr, props(ii)]);
 			totSize = totSize + siz;
 			%s = whos('currentProperty');
 			%totSize = totSize + s.bytes;
