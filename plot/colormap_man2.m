@@ -27,7 +27,7 @@ function mc = colormap_man2(name,lim)
 		mc = colormap(hsv2rgb([mod(-0.8*(1-x)+0.7,1) x.^0 (1-x)*0.75+0.25]));
 	end % case
 	% sigmoid
-	A=[vander_1d([0 1]',3); vanderd_1d([0 1]',1,3)];
+	A=[vander_1d([0 1]',3); vanderd_1d([0 1]',3,1)];
 	scale = 2;
 	c=A \ [0; 1; scale; scale];
 %	c=A \ [0; 1; scale; scale];

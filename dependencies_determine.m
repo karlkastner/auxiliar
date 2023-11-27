@@ -50,6 +50,8 @@ function dependencies_determine(dep_filename,profile_filename,func_C)
 
 	% strip function name
 	name_C = unique(cellfun(@(x) regexprep(x,'>.*',''),name_C(id),'UniformOutput',false));
+	name_C = cellfun(@(x) strrep(x,'/home/pia/1/trunk/','/home/pia/phd/src/'),name_C,'uniformoutput',false);
+	name_C{end+1} = '/home/pia/phd/src/lib/auxiliar/plot/pdfprint.m';
 
 	% strip file name of class folders
 	if (0)
@@ -62,15 +64,14 @@ function dependencies_determine(dep_filename,profile_filename,func_C)
 	end % for idx
 	end % if 0
 
-	% add class files
-%	for idx=1:length(name_C)
-%		fdx = strfind(name_C{idx},'@');
-%		if (~isempty(fdx))
-%			sdx = fdx+regexp(name_C{idx}(fdx+1:end),'/','once');
-%			name_C{idx} = name_C{idx}(1:sdx-1);
-%		end
-%	end % for idx
-	
+	% add class files (for static classes)
+	for idx=1:length(name_C)
+		path_ = dirname(name_C{idx});
+		dir_  = basename(path_);
+		if ('@' == dir_(1))
+			name_C{end+1} = [path_,filesep,dir_(2:end),'.m'];
+		end
+	end % for idx
 
 	% strip rootfolder
 	name_C = cvec(cellfun(@(x) strrep(x,[ROOTFOLDER,'src/'],''),name_C,'Uniformoutput',false));

@@ -4,7 +4,7 @@ function [totSize processed] = memsize(this,processed,leadstr)
 	if (nargin() < 2)
 		leadstr = [];
 	end
-	if (isstruct(this) || isobject(this))
+	if (isstruct(this) || (isobject(this) && ~isa(this,'half')))
 		if (isobject(this))
 			% structs cannot point to the same memory space
 		if (nargin() < 2)

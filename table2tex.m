@@ -26,7 +26,7 @@ function s = table2tex(tab)
 		s = [s,'r'];
 	end
 	s = [s,'}\n'];
-	v = tab.Properties.VariableNames;
+	v = tab.Properties.VariableNames
 	for idx=1:size(tab,2)
 		if (idx>1)
 		s = [s,'& '];
@@ -41,11 +41,13 @@ function s = table2tex(tab)
 			else
 				s = [s,'\n\\\\'];
 			end
-			switch (class(tab{idx,jdx}))
-			case {'double'}
+			if (isnumeric(tab{idx,jdx}))
 				s = [s,num2str(tab{idx,jdx})];
-			case {'string'}
+			elseif (isstr(tab{idx,jdx}) || isstring(tab{idx,jdx}))
 				s = [s,tab{idx,jdx}{1}];
+			else
+				class(tab{idx,jdx})
+				error('unimplemented class');
 			end
 		end
 	end
