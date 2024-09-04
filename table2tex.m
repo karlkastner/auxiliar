@@ -19,7 +19,7 @@
 % and has heavier tales than the underlying distribution
 %
 
-function s = table2tex(tab)
+function s = table2tex(tab,n)
 	s = '\\begin{tabular}{';
 	s = [s,'l'];
 	for idx=2:size(tab,2)
@@ -42,7 +42,11 @@ function s = table2tex(tab)
 				s = [s,'\n\\\\'];
 			end
 			if (isnumeric(tab{idx,jdx}))
-				s = [s,num2str(tab{idx,jdx})];
+				val = tab{idx,jdx};
+				if (nargin()>1)
+					val = round(val,n);
+				end
+				s = [s,num2str(val)]; %tab{idx,jdx})];
 			elseif (isstr(tab{idx,jdx}) || isstring(tab{idx,jdx}))
 				s = [s,tab{idx,jdx}{1}];
 			else

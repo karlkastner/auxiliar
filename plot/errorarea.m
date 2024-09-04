@@ -1,5 +1,6 @@
 % 2014-09-04 16:24:06.709071232 +0200
 % Karl Kastner, Berlin
+%% function h = errorarea(X,Y,yl,yu,acolor,v1,v2)
 
 function h = errorarea(X,Y,yl,yu,acolor,v1,v2)
 	ih = ishold;

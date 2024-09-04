@@ -41,6 +41,8 @@ function dependencies_fetch(url,filename_str,dryrun,svnflag)
 			error('svn has to be installed and acessible via the library path. You can set svnflag to false to fetch dependencies without svn.');
 		end
 	end
+
+	baseurl = 'https://raw.githubusercontent.com';
 	
 	% read dependencies from file
 	file_str = fileread(filename_str);
@@ -68,14 +70,13 @@ function dependencies_fetch(url,filename_str,dryrun,svnflag)
 			dest = sprintf('./lib/%s/%s',repository,path{1});
 			if (0 == exist(dest,'file'))
 				if (svnflag)
-				cmd  = sprintf('svn export -r %s %s/%s/trunk/%s %s',revision,url,repository,path{1},dest);
+					cmd  = sprintf('svn export -r %s %s/%s/trunk/%s %s',revision,url,repository,path{1},dest);
 				if (dryrun)
 					disp(cmd);
 				else
 					system(cmd);
 				end % else of is dryrun
 				else
-					baseurl = 'https://raw.githubusercontent.com';
 					fullurl = [baseurl,'/',user,'/',repository,'/',commithash,'/',path{1}];
 					disp(['saving ',fullurl,' to ',dest]);
 					if (~dryrun)

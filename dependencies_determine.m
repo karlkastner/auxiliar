@@ -26,7 +26,8 @@
 % [l,p]=matlab.codetools.requiredFilesAndProducts('pattern_periodicity_test_batch')
 % C = {}; for idx=1:length(p) if (p(idx).Certain) C{end+1,1}=p(idx).Name, end, end
 function dependencies_determine(dep_filename,profile_filename,func_C)
-	
+	version_control_system = 'git';
+
 	if (~exist(profile_filename,'file'))
 		profile on;
 		for idx=1:length(func_C)
@@ -38,10 +39,10 @@ function dependencies_determine(dep_filename,profile_filename,func_C)
 	else
 		load(profile_filename);
 	end % else of if ~exist
-	
+
 	name_C = {p.FunctionTable.CompleteName};
 	disp(cvec(name_C));
-	
+
 	id= (   cellfun(@(x) isempty(regexp(x,'^/usr/.*','once')),name_C) ...
 	      & cellfun(@(x) isempty(regexp(x,'^com.mathworks','once')),name_C) ...
 	      & cellfun(@(x) isempty(regexp(x,'^java.','once')),name_C) ...
@@ -51,6 +52,8 @@ function dependencies_determine(dep_filename,profile_filename,func_C)
 	% strip function name
 	name_C = unique(cellfun(@(x) regexprep(x,'>.*',''),name_C(id),'UniformOutput',false));
 	name_C = cellfun(@(x) strrep(x,'/home/pia/1/trunk/','/home/pia/phd/src/'),name_C,'uniformoutput',false);
+	% add pdfprint function by default
+	% TODO no magic names
 	name_C{end+1} = '/home/pia/phd/src/lib/auxiliar/plot/pdfprint.m';
 
 	% strip file name of class folders
@@ -78,47 +81,63 @@ function dependencies_determine(dep_filename,profile_filename,func_C)
 
 	name_C = unique(name_C);
 
-	% get revision number
-	for idx=1:length(name_C)		
-		cmd = sprintf('svn info --show-item revision %s\n',[ROOTFOLDER,'/src/',name_C{idx}]);
-		[retval,ret_str] = system(cmd);
-		if (0 == retval)
-			rev_C{idx,1} = chomp(ret_str);
-		else
-			rev_C{idx} = '0';
-		end
-	end
-	
-	% get git commit hash
-	for idx=1:length(name_C)
-		cmd = sprintf('svn info --show-item repos-root-url %s',[ROOTFOLDER,'/src/',name_C{idx}]);
-		[retval,ret_str] = system(cmd);
-		if (0 == retval)
-		url = chomp(ret_str);
-		% remove the lib
-		name_C{idx}
-		c = strsplit(name_C{idx},filesep);
-		c = join(c(3:end),'/');
-c
-		cmd = sprintf('svn propget git-commit --revprop -r HEAD %s\n',[url,'/',c{1}]);
-		[retval,ret_str] = system(cmd);
-		if (0 == retval)
-			commit_C{idx,1} = chomp(ret_str);
-		else
-			commit_C{idx} = 0;
-		end
-		else
-			commit_C{idx} = 0;
-		end
-	end
-%https://github.com/karlkastner/auxiliar/addpath_recursive.m
+	switch (version_control_system)
+		case {'git'}
+			% get git commit hash
+			for idx=1:length(name_C)
+				rev_C{idx} = 'N/A';
+				dir_str = dirname([ROOTFOLDER,'/src/',name_C{idx}]);
+				%cmd = sprintf('git rev-parse HEAD "%s" | head -n 1',[ROOTFOLDER,'/src/',name_C{idx}]);
+				cmd = sprintf('cd %s && git rev-parse HEAD',dir_str);
+				[retval,ret_str] = system(cmd);
+				if (0 == retval)
+					commit_C{idx} = chomp(ret_str);
+				else
+					disp(ret_str);
+					commit_C{idx} = 0;
+				end
+			end
+		case {'svn'}
 
+			% get svn revision number
+			for idx=1:length(name_C)
+				cmd = sprintf('svn info --show-item revision %s\n',[ROOTFOLDER,'/src/',name_C{idx}]);
+				[retval,ret_str] = system(cmd);
+				if (0 == retval)
+					rev_C{idx,1} = chomp(ret_str);
+				else
+					rev_C{idx} = '0';
+				end
+			end % for idx
+
+			% get git commit hash
+			for idx=1:length(name_C)
+				cmd = sprintf('svn info --show-item repos-root-url %s',[ROOTFOLDER,'/src/',name_C{idx}]);
+				[retval,ret_str] = system(cmd);
+				if (0 == retval)
+					url = chomp(ret_str);
+					% remove the lib
+					c = strsplit(name_C{idx},filesep);
+					c = join(c(3:end),'/');
+
+					cmd = sprintf('svn propget git-commit --revprop -r HEAD %s\n',[url,'/',c{1}]);
+					[retval,ret_str] = system(cmd);
+					if (0 == retval)
+						commit_C{idx,1} = chomp(ret_str);
+					else
+						commit_C{idx} = 0;
+					end % if 0 == retval
+				else
+					commit_C{idx} = 0;
+				end % if 0 == retval
+			end % for idx
+	end % switch version control
 
 	% determine library files
 	fid = fopen(dep_filename,'w');
 	if (fid < 0)
 		error('cannot open file for writing')
-	end % if fid < 0 
+	end % if fid < 0
 	for idx=1:length(name_C)
 		name = name_C{idx};
 		if (strcmp(name(1:4),'lib/'))

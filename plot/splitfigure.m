@@ -26,7 +26,7 @@ function [fh,ax,t] = splitfigure(siz,id,flag,name,factor,usetiledlayout,t,vararg
 	if (nargin() < 5 || isempty(factor))
 		factor = 10;
 	end
-	if (nargin()<6)
+	if (nargin()<6||isempty(usetiledlayout))
 		usetiledlayout = false;
 	end
 	if (flag)
