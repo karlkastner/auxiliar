@@ -22,14 +22,12 @@ function [h,a] = hash_str(s,h,a)
 		h = 0;
 		a = 1;
 	end
+	n = 2^31;
 	for idx=1:length(s)
-%		id = mod(id,23);
 		h  = h + a*s(idx);
-		h  = mod(h, 2^31);
-%		printf('%12d %20f\n',a,h)
-		%id = id+1;
+		h  = mod(h, n);
 		a  = 31*a;
-		a  = mod(a,2^31);
+		a  = mod(a, n);
 	end
 end
 

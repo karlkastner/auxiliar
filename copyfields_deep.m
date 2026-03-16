@@ -1,16 +1,22 @@
 % Tue  7 Jan 10:08:49 +08 2020
-function p2 = copyfields_deep(p1,p2)
-	f = fieldnames(p1);
+% function dest = copyfields_deep(src,dest)
+% copy fields from struct 1 to struct 2
+function dest = copyfields_deep(src,dest)
+	f = fieldnames(src);
 %	for fi = rvec(f)
 	for idx = 1:length(f)
-		if (isstruct(p1.(f{idx})))
-			if (~isfieldorprop(p2,f{idx}))
-				p2.(f{idx}) = p1.(f{idx});
+		if (isstruct(src.(f{idx})))
+			if (    ~isfieldorprop(dest,f{idx}) ...
+			     || (   ~isstruct(dest.(f{idx})) ...
+                                 && ~isobject(dest.(f{idx})) ...
+				) ...
+			   )
+				dest.(f{idx}) = src.(f{idx});
 			else
-				p2.(f{idx}) = copyfields_deep(p1.(f{idx}),p2.(f{idx}));
+				dest.(f{idx}) = copyfields_deep(src.(f{idx}),dest.(f{idx}));
 			end
 		else
-			p2.(f{idx}) = p1.(f{idx});
+			dest.(f{idx}) = src.(f{idx});
 		end
 	end
 end

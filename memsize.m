@@ -1,7 +1,11 @@
 % Fr 22. Mai 14:39:47 CEST 2015
 % Karl Kastner, Berlin
-function [totSize processed] = memsize(this,processed,leadstr)	
-	if (nargin() < 2)
+% function [totSize processed] = memsize(this,processed,leadstr)	
+function [totSize, processed] = memsize(this,processed,leadstr)	
+	if (nargin()<2)
+		processed = {};
+	end
+	if (nargin() < 3)
 		leadstr = [];
 	end
 	if (length(this)>1)

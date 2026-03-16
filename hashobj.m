@@ -16,6 +16,8 @@
 %
 %% has the model parameters for filename generation
 %
+% TODO convert strings with dec2hex and numbers with num2hex,
+% then use python hash function 
 function [key_val, key_str] = hashobj(obj,hashfield_C) 
 	key_str = keyfun('',obj,hashfield_C,'');
 	key_val = hash_str(key_str);
@@ -40,7 +42,7 @@ function [key_val, key_str] = hashobj(obj,hashfield_C)
 				elseif (isa(val,'function_handle'))
 					val_s = func2str(val);
 				elseif (iscell(val))
-					for cdx=1:length(val)
+					for cdx=1:numel(val)
 						val_s = '';
 						if (isempty(val{cdx}))
 							% nothing to do
@@ -50,16 +52,24 @@ function [key_val, key_str] = hashobj(obj,hashfield_C)
 							else
 								val_s = [val_s,' ',val{cdx}];
 							end
+						elseif (isnumeric(val{cdx})) % assume numeric cell
+							val_s = [val_s,' ',num2str(val{cdx})];
 						else
-							error('not yet implmented')
+							error('not yet implemented')
 						end
 					end % for cdx
 				elseif (isnumeric(val))
 					if (length(val)>2)
-						val_s = hash_float(val);
+						% this can be a long vector or matrix, so has into a single value
+						hash_double = hash_float(val);
+						% use e to preserve digits
+						% f sets numbers close to zero to eps
+						val_s = sprintf('%e',val);
 					else
-						val_s = sprintf('%g',val);
+						val_s = sprintf('%e',val);
 					end
+				elseif (islogical(val))
+					val_s = sprintf('%e',val);
 				else
 					error('unimplemented type');
 				end % type of val
