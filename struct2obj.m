@@ -1,3 +1,4 @@
+% 2024-07-28 13:35:22.507948106 +0200
 function obj = struct2obj(s,classname)
 	% preallocate
 	obj(length(s)) = feval(classname);

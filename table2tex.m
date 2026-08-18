@@ -20,26 +20,40 @@
 %
 
 function s = table2tex(tab,n)
+	v = tab.Properties.VariableNames
+	rn = tab.Properties.RowNames;
 	s = '\\begin{tabular}{';
-	s = [s,'l'];
-	for idx=2:size(tab,2)
+	if (~isempty(rn))
+		% column for row names
+		s = [s,'l'];
+	end
+	%s = [s,'l'];
+	for idx=1:size(tab,2)
 		s = [s,'r'];
 	end
 	s = [s,'}\n'];
-	v = tab.Properties.VariableNames
+	if (~isempty(rn))
+			s = [s,'& '];
+	end
+	% colum header
 	for idx=1:size(tab,2)
 		if (idx>1)
-		s = [s,'& '];
+			s = [s,'& '];
 		end
 		s = [s,strrep(v{idx},'\','\\')];
 	end
 	
 	for idx=1:size(tab,1)
+		% new row
+		s = [s,'\n\\\\'];
+		% rowname
+		if (~isempty(rn))
+			s = [s,rn{idx},' &'];
+		end
+		% values (columns)
 		for jdx=1:size(tab,2)
-			if (jdx>1) %size(tab,2))
+			if (jdx>1)
 				s = [s,' &'];
-			else
-				s = [s,'\n\\\\'];
 			end
 			if (isnumeric(tab{idx,jdx}))
 				val = tab{idx,jdx};
@@ -56,5 +70,6 @@ function s = table2tex(tab,n)
 		end
 	end
 	s = [s,'\n\\end{tabular}\n'];
+	printf(s);
 end
 

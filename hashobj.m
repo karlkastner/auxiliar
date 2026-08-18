@@ -28,12 +28,12 @@ function [key_val, key_str] = hashobj(obj,hashfield_C)
 			% hot fix, otherwise hash changes after run/init
 			if (strcmp(field_C{idx},'z0'))
 				val = [];
-			end
+			end % if strcmp
 			% hot fix, otherwise hash changes after run/init
 			if (strcmp(field_C{idx},'p'))
 				% TODO hot fix
 				val = struct();
-			end
+			end % if strcmp p
 			if (isstruct(val))
 				key_str = keyfun(key_str,val,fieldnames(val),[prefix,'.',field_C{idx}]);
 			else
@@ -42,32 +42,25 @@ function [key_val, key_str] = hashobj(obj,hashfield_C)
 				elseif (isa(val,'function_handle'))
 					val_s = func2str(val);
 				elseif (iscell(val))
-					for cdx=1:numel(val)
-						val_s = '';
-						if (isempty(val{cdx}))
-							% nothing to do
-						elseif (isstr(val{cdx}))
-							if (isempty(val_s))
-								val_s = val{cdx};
-							else
-								val_s = [val_s,' ',val{cdx}];
-							end
-						elseif (isnumeric(val{cdx})) % assume numeric cell
-							val_s = [val_s,' ',num2str(val{cdx})];
-						else
-							error('not yet implemented')
-						end
-					end % for cdx
+					val_s = process_cell(val);
+%					for cdx=1:numel(val)
+%						val_s = '';
+%						if (isempty(val{cdx}))
+%							% nothing to do
+%						elseif (isstr(val{cdx}))
+%							if (isempty(val_s))
+%								val_s = val{cdx};
+%							else
+%								val_s = [val_s,' ',val{cdx}];
+%							end
+%						elseif (isnumeric(val{cdx})) % assume numeric cell
+%							val_s = [val_s,' ',num2str(val{cdx})];
+%						else
+%							error('not yet implemented')
+%						end
+%					end % for cdx
 				elseif (isnumeric(val))
-					if (length(val)>2)
-						% this can be a long vector or matrix, so has into a single value
-						hash_double = hash_float(val);
-						% use e to preserve digits
-						% f sets numbers close to zero to eps
-						val_s = sprintf('%e',val);
-					else
-						val_s = sprintf('%e',val);
-					end
+					val_s = process_numeric(val);
 				elseif (islogical(val))
 					val_s = sprintf('%e',val);
 				else
@@ -79,5 +72,49 @@ function [key_val, key_str] = hashobj(obj,hashfield_C)
 					key_str = [key_str,sprintf('%s=%s;',[prefix,'.',field_C{idx}],val_s)];
 				end % else of isempty prefix
 			end % else of isstruct val
+		end % for idx
+	end % function key_str
+
+	function val_s = process_numeric(val)
+		if (length(val)>2)
+			% this can be a long vector or matrix, so has into a single value
+			hash_double = hash_float(val);
+			% use e to preserve digits
+			% f sets numbers close to zero to eps
+			val_s = sprintf('%e',val);
+		else
+			val_s = sprintf('%e',val);
+		end
+	end % process numeric
+
+	function val_s = process_cell(val)
+		val_s = '';
+		for cdx=1:numel(val)
+		if (isempty(val{cdx}))
+			% nothing to do
+		elseif (isstr(val{cdx}))
+			if (isempty(val_s))
+				val_s = val{cdx};
+			else
+				val_s = [val_s, ' ', val{cdx}];
+			end
+		elseif (isnumeric(val{cdx})) % assume numeric cell
+			if (isempty(val_s))
+				val_s = process_numeric(val{cdx}); % num2str(val{cdx})];
+			else
+				val_s = [val_s, ' ', process_numeric(val{cdx})]; % num2str(val{cdx})];
+			end
+		elseif (iscell(val{cdx}))
+			if (isempty(val_s))
+				val_s = process_cell(val{cdx});
+			else
+				val_s = [val_s, ' ', process_cell(val{cdx})];
+			end
+		else
+			error('not yet implemented')
+		end % else of if
+		end % for cdx
+	end % process_cell
+
 end % hashobj
 
